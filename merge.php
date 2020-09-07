@@ -1,4 +1,7 @@
 <?php
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 function set_metrics($arr, $data, $count){
     $key = strtolower($data[0]);
     if( !isset($arr[$key]) ){
@@ -67,12 +70,14 @@ function download_csv($csv){
     header('Cache-Control: must-revalidate');
     header('Pragma: public');
     header('Content-Length: ' . filesize($tmpName));
-
-    ob_clean();
+    
+    if (ob_get_level())
+        ob_clean();
     flush();
     readfile($tmpName);
 
     unlink($tmpName);
+    die();
 }
 if (isset($_FILES['csvFile']))
     $merged = csvMerge($_FILES['csvFile']['tmp_name']);
@@ -80,10 +85,8 @@ if (isset($merged) && $merged !== FALSE){
     $csv = generate_csv($merged);
     download_csv($csv);
 }
-else {
 ?>
 <form method="post" enctype="multipart/form-data">
     <input type="file" name="csvFile" id="csvFile">
     <input type="submit" value="Upload CSV" name="submit">
 </form>
-<?php }
