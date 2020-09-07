@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 function set_metrics($arr, $data, $count){
     $key = strtolower($data[0]);
     if( !isset($arr[$key]) ){
@@ -83,8 +80,10 @@ if (isset($merged) && $merged !== FALSE){
     $csv = generate_csv($merged);
     download_csv($csv);
 }
+else {
 ?>
 <form method="post" enctype="multipart/form-data">
     <input type="file" name="csvFile" id="csvFile">
     <input type="submit" value="Upload CSV" name="submit">
 </form>
+<?php }
